@@ -1,0 +1,74 @@
+﻿;------------------------------------------------------------------
+;--- cập nhật số người trong phòng sau khi thêm hợp đồng ---
+CREATE TRIGGER trigger_ThemHopDong ON HopDong
+    AFTER INSERT
+AS
+    BEGIN
+        UPDATE  dbo.Phong
+        SET     SoNguoiHienTai = ( SELECT   COUNT(IDP)
+                                   FROM     dbo.HopDong
+                                   WHERE    dbo.Phong.IDP = dbo.HopDong.IDP
+                                            AND dbo.HopDong.NgayKetThuc > GETDATE()
+                                   GROUP BY dbo.HopDong.IDP
+                                 )
+        UPDATE  dbo.Phong
+        SET     SoNguoiHienTai = 0
+        WHERE   SoNguoiHienTai IS NULL
+    END
+;----------------------------------------
+; chọn phòng trống theo giới tính
+    SELECT  *
+    FROM    dbo.Phong
+    WHERE   IDP IN ( SELECT IDP
+                     FROM   dbo.HopDong
+                     WHERE  IDSV IN ( SELECT    IDSV
+                                      FROM      dbo.SinhVien
+                                      WHERE     GioiTinh = 1 )AND NgayKetThuc>GETDATE() )
+:-------------------------------------------------------------------------------
+CREATE TRIGGER trigger_XoaHopDong ON HopDong
+    AFTER delete
+AS
+    BEGIN
+        UPDATE  dbo.Phong
+        SET     SoNguoiHienTai = ( SELECT   COUNT(IDP)
+                                   FROM     dbo.HopDong
+                                   WHERE    dbo.Phong.IDP = dbo.HopDong.IDP
+                                            AND dbo.HopDong.NgayKetThuc > GETDATE()
+                                   GROUP BY dbo.HopDong.IDP
+                                 )
+        UPDATE  dbo.Phong
+        SET     SoNguoiHienTai = 0
+        WHERE   SoNguoiHienTai IS NULL
+    END
+;;---------------------------------
+CREATE TRIGGER trigger_SuaHopDong ON HopDong
+    AFTER update
+AS
+    BEGIN
+        UPDATE  dbo.Phong
+        SET     SoNguoiHienTai = ( SELECT   COUNT(IDP)
+                                   FROM     dbo.HopDong
+                                   WHERE    dbo.Phong.IDP = dbo.HopDong.IDP
+                                            AND dbo.HopDong.NgayKetThuc > GETDATE()
+                                   GROUP BY dbo.HopDong.IDP
+                                 )
+        UPDATE  dbo.Phong
+        SET     SoNguoiHienTai = 0
+        WHERE   SoNguoiHienTai IS NULL
+    END
+------------------------------------------------
+CREATE TRIGGER trigger_HopDong ON HopDong
+    AFTER INSERT,update,delete
+AS
+    BEGIN
+        UPDATE  dbo.Phong
+        SET     SoNguoiHienTai = ( SELECT   COUNT(IDP)
+                                   FROM     dbo.HopDong
+                                   WHERE    dbo.Phong.IDP = dbo.HopDong.IDP
+                                            AND dbo.HopDong.NgayKetThuc > GETDATE()
+                                   GROUP BY dbo.HopDong.IDP
+                                 )
+        UPDATE  dbo.Phong
+        SET     SoNguoiHienTai = 0
+        WHERE   SoNguoiHienTai IS NULL
+    END
