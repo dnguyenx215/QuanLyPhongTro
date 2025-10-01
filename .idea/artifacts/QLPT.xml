@@ -1,0 +1,17 @@
+<component name="ArtifactManager">
+  <artifact type="exploded-war" name="QLPT">
+    <output-path>$PROJECT_DIR$/classes/artifacts/QLPT</output-path>
+    <root id="root">
+      <element id="directory" name="WEB-INF">
+        <element id="directory" name="classes">
+          <element id="module-output" name="QuanLyPhongTro" />
+        </element>
+        <element id="directory" name="lib">
+          <element id="library" level="project" name="Java EE 6-Java EE 6" />
+          <element id="library" level="project" name="mssql-jdbc-7.4.1.jre8" />
+        </element>
+      </element>
+      <element id="module-source" name="QuanLyPhongTro" />
+    </root>
+  </artifact>
+</component>
